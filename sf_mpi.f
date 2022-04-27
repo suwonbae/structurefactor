@@ -14,14 +14,11 @@ C mul           result of q_vec (1 by 3) x a(:,4:)' (3 by num_atoms)
         real q_and_val(n*n*n,2)
         real q_and_val_tmp(n*n*n,2)
 
-        real a(num_atoms,6)
+        real a(num_atoms,3)
         real mul(num_atoms), res
-        real boxlength(3,2)
 
-C s1 - s9       dummy for strings
-C x1 - x6       dummy for reading in xyz
-        character(len=10) s1(2), s2, s3(4), s4, s5(5), s9(8)
-        real x1, x2, x3, x4, x5, x6
+C x1 - x3       dummy for reading in xyz
+        real x1, x2, x3
 
 C for mpi
         integer send_data_tag, return_data_tag
@@ -40,23 +37,11 @@ C for mpi
         call MPI_Init ( ierr )
 
         open(1,file='input.xyz') ! read in a dump file
-        read(1,*) s1
-        read(1,*) s2
-        read(1,*) s3
-        read(1,*) s4
-        read(1,*) s5
-        read(1,*) boxlength(1,1), boxlength(1,2)
-        read(1,*) boxlength(2,1), boxlength(2,2)
-        read(1,*) boxlength(3,1), boxlength(3,2)
-        read(1,*) s9
         do i = 1, num_atoms, 1
-           read(1,*) x1, x2, x3, x4, x5, x6
+           read(1,*) x1, x2, x3
            a(i,1)=x1
            a(i,2)=x2
            a(i,3)=x3
-           a(i,4)=x4
-           a(i,5)=x5
-           a(i,6)=x6 
         enddo 
         close(1)
 
@@ -90,7 +75,7 @@ C for mpi
            q_modulus=NORM2(q_vec)
            q_and_val_tmp(i,1)=q_modulus
 
-           mul=matmul(a(:,4:),q_vec)
+           mul=matmul(a,q_vec)
            if (i .eq. 1) then
               write(*,*) q_vec
            endif
