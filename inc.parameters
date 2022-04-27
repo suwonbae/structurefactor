@@ -1,0 +1,4 @@
+C parameters
+        parameter (num_atoms=32000)
+        parameter (n=101)
+        parameter (L=34.000000)
