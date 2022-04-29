@@ -1,4 +1,6 @@
 C parameters
         parameter (num_atoms=32000)
         parameter (n=101)
-        parameter (L=34.000000)
+        parameter (Lx=33.01396654355308)
+        parameter (Ly=33.01396654355308)
+	parameter (Lz=33.01396654355308)

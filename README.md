@@ -10,7 +10,9 @@ N (row) by 3 (col) in which each row corresponds to a single atom/bead and each 
 ## inc.parameters
 * `num_atoms`, number of total atoms/beads = N;
 * `n`, number of points in each axis in the reciprocal space;
-* `L`, simulation box size;
+* `Lx`, simulation box length in x aixs;
+* `Ly`, length in y axis;
+* `Lz`, length in z axis;
 
 ## example
 <img src="https://github.com/suwonbae/structurefactor/blob/main/sq.png" style="width: 350px;"/>

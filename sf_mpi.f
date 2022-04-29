@@ -11,8 +11,8 @@ C mul           result of q_vec (1 by 3) x a(:,4:)' (3 by num_atoms)
 
         integer i, q_1, q_2, q_3
         real q_vec(3)
-        real q_and_val(n*n*n,2)
-        real q_and_val_tmp(n*n*n,2)
+        real q_and_val(n*n*n,4)
+        real q_and_val_tmp(n*n*n,4)
 
         real a(num_atoms,3)
         real mul(num_atoms), res
@@ -70,22 +70,19 @@ C for mpi
            q_1=(i-1)/n**2
            q_2=mod(i-1,n**2)/n
            q_3=mod(mod(i-1,n**2),n)
-           q_vec=(/q_1, q_2, q_3/)*2*c_pi/L ! delta_q=2*pi/L
+           q_vec=(/q_1, q_2, q_3/)*2*c_pi ! delta_q=2*pi/L
+           q_vec(1) = q_vec(1)/Lx
+           q_vec(2) = q_vec(2)/Ly
+           q_vec(3) = q_vec(3)/Lz
 
-           q_modulus=NORM2(q_vec)
-           q_and_val_tmp(i,1)=q_modulus
+           ! q_modulus=NORM2(q_vec)
+           q_and_val_tmp(i,1:3)=q_vec
 
            mul=matmul(a,q_vec)
-           if (i .eq. 1) then
-              write(*,*) q_vec
-           endif
 
            res=sum(cos(mul))**2+sum(sin(mul))**2
-           if (i .eq. 1) then
-              write(*,*) res/num_atoms
-           endif
 
-           q_and_val_tmp(i,2)=res/num_atoms
+           q_and_val_tmp(i,4)=res/num_atoms
 
         enddo
 
@@ -103,7 +100,7 @@ C for mpi
               num_rows=end_row-start_row+1
 
               call MPI_Recv(q_and_val_tmp(1:num_rows,:),
-     &        num_rows*2,MPI_Real,an_id,
+     &        num_rows*4,MPI_Real,an_id,
      &        MPI_Any_Tag,MPI_Comm_World,status,ierr)
 
               q_and_val(start_row:end_row,:)=
@@ -111,7 +108,7 @@ C for mpi
            enddo
         else
            call MPI_Send(q_and_val_tmp(start_row:end_row,:),
-     &     num_rows*2,MPI_Real,root_process,
+     &     num_rows*4,MPI_Real,root_process,
      &     return_data_tag,MPI_Comm_World,ierr)
         endif
 
