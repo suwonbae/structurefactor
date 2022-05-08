@@ -1,8 +1,11 @@
 # Structure Factor
 
-Structure factor is calculated for a given xyz file.
+Structure factor is calculated using MPI for a given xyz file.
 
 The script reads in input.xyz and inc.params.
+```
+mpic++ sf.cpp
+```
 
 ## input.xyz
 N (row) by 3 (col) in which each row corresponds to a single atom/bead and each col x, y, and z.
